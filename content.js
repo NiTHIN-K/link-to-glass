@@ -17,9 +17,13 @@
         button.title = `View ${companyName} on Glassdoor`;
         button.innerHTML = '🔍 Glassdoor';
         
-        // Add click tracking
+        // Store company name as data attribute to avoid closure issues
+        button.setAttribute('data-company-name', companyName);
+        
+        // Add click tracking - use data attribute instead of closure
         button.addEventListener('click', function(e) {
-            console.log('Glassdoor button clicked for:', companyName);
+            const clickedCompanyName = this.getAttribute('data-company-name');
+            console.log('Glassdoor button clicked for:', clickedCompanyName);
         });
         
         return button;

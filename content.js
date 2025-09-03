@@ -17,9 +17,12 @@
         button.title = `View ${companyName} on Glassdoor`;
         button.innerHTML = '🔍 Glassdoor';
         
-        // Add click tracking
+        // Add click tracking and prevent event propagation
         button.addEventListener('click', function(e) {
             console.log('Glassdoor button clicked for:', companyName);
+            // Stop the event from bubbling up to parent elements (job cards, etc.)
+            // that might have their own click handlers
+            e.stopPropagation();
         });
         
         return button;

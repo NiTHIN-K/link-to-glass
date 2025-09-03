@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 300px;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .icon {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+        
+        .title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 16px;
+        }
+        
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .features li {
+            padding: 4px 0;
+            color: #555;
+        }
+        
+        .features li:before {
+            content: "✓ ";
+            color: #0caa41;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .status {
+            background: #f0f8ff;
+            border: 1px solid #0caa41;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #0b8a36;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="icon">🔗</span>
+        <span class="title">Link to Glass</span>
+    </div>
+    
+    <div class="status" id="status">
+        Active on LinkedIn pages
+    </div>
+    
+    <div class="description">
+        Automatically adds Glassdoor buttons next to company names on LinkedIn job feeds.
+    </div>
+    
+    <ul class="features">
+        <li>Works on job search results</li>
+        <li>Works on job detail pages</li>
+        <li>Opens Glassdoor in new tab</li>
+        <li>Automatic company name detection</li>
+    </ul>
+    
+    <div class="footer">
+        Navigate to LinkedIn to see the extension in action
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

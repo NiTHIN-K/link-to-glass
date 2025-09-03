@@ -34,62 +34,78 @@
             .replace(/\s*\(.*?\)\s*/g, '') // Remove text in parentheses
             .replace(/\s*·.*$/g, '') // Remove everything after ·
             .replace(/\s*-.*$/g, '') // Remove everything after -
+            .replace(/\s*\|.*$/g, '') // Remove everything after |
+            .replace(/\s*,.*$/g, '') // Remove everything after comma (locations)
+            .replace(/\s*@.*$/g, '') // Remove @ mentions
+            .replace(/\s*#.*$/g, '') // Remove hashtags
             .replace(/\s+/g, ' ') // Normalize whitespace
             .trim();
     }
     
     // Function to find and process company elements
     function processCompanyElements() {
-        // LinkedIn job feed company selectors
-        const selectors = [
-            '.job-search-card__subtitle-link', // Job search results
-            '.jobs-search-results-list__item-company', // Job listings
-            '.job-card-container__company-name', // Job cards
-            '.jobs-unified-top-card__company-name', // Job detail page
-            '.jobs-unified-top-card__subtitle-primary-grouping .app-aware-link', // Job detail company link
-            'a[data-control-name="job_search_company_name"]', // Company name links in job search
-            '.artdeco-entity-lockup__subtitle', // Company names in entity lockups
-            '.job-details-jobs-unified-top-card__company-name' // Job details company
-        ];
-        
-        selectors.forEach(selector => {
-            const elements = document.querySelectorAll(selector + ':not(.' + PROCESSED_CLASS + ')');
+        try {
+            // LinkedIn job feed company selectors
+            const selectors = [
+                '.job-search-card__subtitle-link', // Job search results
+                '.jobs-search-results-list__item-company', // Job listings
+                '.job-card-container__company-name', // Job cards
+                '.jobs-unified-top-card__company-name', // Job detail page
+                '.jobs-unified-top-card__subtitle-primary-grouping .app-aware-link', // Job detail company link
+                'a[data-control-name="job_search_company_name"]', // Company name links in job search
+                '.artdeco-entity-lockup__subtitle', // Company names in entity lockups
+                '.job-details-jobs-unified-top-card__company-name' // Job details company
+            ];
             
-            elements.forEach(element => {
-                if (element.classList.contains(PROCESSED_CLASS)) return;
-                
-                const companyName = cleanCompanyName(element.textContent);
-                if (!companyName || companyName.length < 2) return;
-                
-                // Mark as processed
-                element.classList.add(PROCESSED_CLASS);
-                
-                // Create and insert Glassdoor button
-                const glassdoorBtn = createGlassdoorButton(companyName);
-                
-                // Find the best place to insert the button
-                let insertTarget = element.parentElement;
-                
-                // If the element is a link, insert after it
-                if (element.tagName === 'A') {
-                    insertTarget = element;
-                }
-                
-                // Create wrapper if needed
-                if (insertTarget && !insertTarget.querySelector('.' + BUTTON_CLASS)) {
-                    const wrapper = document.createElement('span');
-                    wrapper.className = 'glassdoor-btn-wrapper';
-                    wrapper.appendChild(glassdoorBtn);
+            selectors.forEach(selector => {
+                try {
+                    const elements = document.querySelectorAll(selector + ':not(.' + PROCESSED_CLASS + ')');
                     
-                    // Insert after the company element
-                    if (insertTarget.nextSibling) {
-                        insertTarget.parentNode.insertBefore(wrapper, insertTarget.nextSibling);
-                    } else {
-                        insertTarget.parentNode.appendChild(wrapper);
-                    }
+                    elements.forEach(element => {
+                        try {
+                            if (element.classList.contains(PROCESSED_CLASS)) return;
+                            
+                            const companyName = cleanCompanyName(element.textContent);
+                            if (!companyName || companyName.length < 2) return;
+                            
+                            // Mark as processed
+                            element.classList.add(PROCESSED_CLASS);
+                            
+                            // Create and insert Glassdoor button
+                            const glassdoorBtn = createGlassdoorButton(companyName);
+                            
+                            // Find the best place to insert the button
+                            let insertTarget = element.parentElement;
+                            
+                            // If the element is a link, insert after it
+                            if (element.tagName === 'A') {
+                                insertTarget = element;
+                            }
+                            
+                            // Create wrapper if needed
+                            if (insertTarget && !insertTarget.querySelector('.' + BUTTON_CLASS)) {
+                                const wrapper = document.createElement('span');
+                                wrapper.className = 'glassdoor-btn-wrapper';
+                                wrapper.appendChild(glassdoorBtn);
+                                
+                                // Insert after the company element
+                                if (insertTarget.nextSibling) {
+                                    insertTarget.parentNode.insertBefore(wrapper, insertTarget.nextSibling);
+                                } else {
+                                    insertTarget.parentNode.appendChild(wrapper);
+                                }
+                            }
+                        } catch (elementError) {
+                            console.warn('Link to Glass: Error processing element:', elementError);
+                        }
+                    });
+                } catch (selectorError) {
+                    console.warn('Link to Glass: Error with selector:', selector, selectorError);
                 }
             });
-        });
+        } catch (error) {
+            console.error('Link to Glass: Error in processCompanyElements:', error);
+        }
     }
     
     // Function to initialize the extension

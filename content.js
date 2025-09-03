@@ -9,17 +9,25 @@
     
     // Function to create Glassdoor button
     function createGlassdoorButton(companyName) {
+        // Defensive copy to ensure the company name is captured correctly
+        const company = String(companyName);
+        const encodedCompany = encodeURIComponent(company);
+        const glassdoorUrl = GLASSDOOR_BASE_URL + encodedCompany;
+        
         const button = document.createElement('a');
         button.className = BUTTON_CLASS;
-        button.href = GLASSDOOR_BASE_URL + encodeURIComponent(companyName);
+        button.href = glassdoorUrl;
         button.target = '_blank';
         button.rel = 'noopener noreferrer';
-        button.title = `View ${companyName} on Glassdoor`;
+        button.title = `View ${company} on Glassdoor`;
         button.innerHTML = '🔍 Glassdoor';
+        
+        // Store company name as data attribute for debugging
+        button.setAttribute('data-company-name', company);
         
         // Add click tracking
         button.addEventListener('click', function(e) {
-            console.log('Glassdoor button clicked for:', companyName);
+            console.log('Glassdoor button clicked for:', company);
         });
         
         return button;
@@ -65,13 +73,15 @@
                         try {
                             if (element.classList.contains(PROCESSED_CLASS)) return;
                             
-                            const companyName = cleanCompanyName(element.textContent);
+                            // Extract company name immediately and store as local variable
+                            const elementText = element.textContent || '';
+                            const companyName = cleanCompanyName(elementText);
                             if (!companyName || companyName.length < 2) return;
                             
-                            // Mark as processed
+                            // Mark as processed early to prevent duplicate processing
                             element.classList.add(PROCESSED_CLASS);
                             
-                            // Create and insert Glassdoor button
+                            // Create and insert Glassdoor button with the captured company name
                             const glassdoorBtn = createGlassdoorButton(companyName);
                             
                             // Find the best place to insert the button

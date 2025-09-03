@@ -1,0 +1,27 @@
+# Development files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files
+test-*
+/tmp/
+
+# Build artifacts (if any)
+dist/
+build/
+
+# Node modules (if using npm for development)
+node_modules/
+
+# Extension packaging
+*.zip
+*.crx
+*.pem

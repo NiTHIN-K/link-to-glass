@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link to Glass Extension Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #0caa41, #0b8a36);
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .job-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .job-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0073b1;
+            margin-bottom: 8px;
+        }
+        
+        .company-name {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .glassdoor-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 8px;
+            padding: 4px 8px;
+            background-color: #0caa41;
+            color: white !important;
+            text-decoration: none !important;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.2;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        
+        .glassdoor-btn:hover {
+            background-color: #0b8a36 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(12, 170, 65, 0.3);
+        }
+        
+        .location {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .installation {
+            background: #e8f4fd;
+            border-left: 4px solid #0073b1;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px 0;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #0caa41;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔗 Link to Glass</h1>
+        <p>Chrome Extension Demo - LinkedIn to Glassdoor Integration</p>
+    </div>
+    
+    <div class="installation">
+        <h2>🚀 Quick Installation</h2>
+        <div class="step">
+            <span class="step-number">1</span>
+            Download or clone this repository to your computer
+        </div>
+        <div class="step">
+            <span class="step-number">2</span>
+            Open Chrome and navigate to <span class="code">chrome://extensions/</span>
+        </div>
+        <div class="step">
+            <span class="step-number">3</span>
+            Enable "Developer mode" in the top right corner
+        </div>
+        <div class="step">
+            <span class="step-number">4</span>
+            Click "Load unpacked" and select the extension folder
+        </div>
+        <div class="step">
+            <span class="step-number">5</span>
+            Navigate to LinkedIn job search to see the extension in action!
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>📋 How It Works on LinkedIn</h2>
+        <p>Once installed, the extension will automatically add Glassdoor buttons next to company names. Here's what you'll see:</p>
+        
+        <div class="job-card">
+            <div class="job-title">Senior Software Engineer</div>
+            <div class="company-name">
+                Google
+                <a href="https://www.glassdoor.com/Search/results.htm?keyword=Google" target="_blank" class="glassdoor-btn">🔍 Glassdoor</a>
+            </div>
+            <div class="location">Mountain View, CA</div>
+        </div>
+        
+        <div class="job-card">
+            <div class="job-title">Product Manager</div>
+            <div class="company-name">
+                Microsoft
+                <a href="https://www.glassdoor.com/Search/results.htm?keyword=Microsoft" target="_blank" class="glassdoor-btn">🔍 Glassdoor</a>
+            </div>
+            <div class="location">Seattle, WA</div>
+        </div>
+        
+        <div class="job-card">
+            <div class="job-title">Data Scientist</div>
+            <div class="company-name">
+                Amazon
+                <a href="https://www.glassdoor.com/Search/results.htm?keyword=Amazon" target="_blank" class="glassdoor-btn">🔍 Glassdoor</a>
+            </div>
+            <div class="location">Seattle, WA</div>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>✨ Features</h2>
+        <ul>
+            <li>🎯 <strong>Automatic Detection:</strong> Finds company names on LinkedIn job searches and job detail pages</li>
+            <li>🔍 <strong>One-Click Research:</strong> Opens Glassdoor company pages in new tabs</li>
+            <li>📱 <strong>Responsive Design:</strong> Works on desktop and mobile LinkedIn</li>
+            <li>⚡ <strong>Dynamic Loading:</strong> Handles LinkedIn's single-page application navigation</li>
+            <li>🎨 <strong>Clean Integration:</strong> Styled to match LinkedIn's design</li>
+            <li>🔒 <strong>Privacy-Focused:</strong> No data collection, all processing happens locally</li>
+        </ul>
+    </div>
+    
+    <div class="demo-section">
+        <h2>🔧 Technical Details</h2>
+        <ul>
+            <li><strong>Manifest V3:</strong> Uses the latest Chrome extension standards</li>
+            <li><strong>Content Scripts:</strong> Injects functionality into LinkedIn pages</li>
+            <li><strong>Smart Selectors:</strong> Targets multiple LinkedIn layout variations</li>
+            <li><strong>Company Name Cleaning:</strong> Intelligently extracts clean company names</li>
+            <li><strong>Mutation Observer:</strong> Handles dynamic content loading</li>
+        </ul>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px; color: #888;">
+        <p>Made with ❤️ for job hunters who want to research companies efficiently</p>
+    </div>
+</body>
+</html>

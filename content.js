@@ -54,16 +54,13 @@
     // Function to find and process company elements
     function processCompanyElements() {
         try {
-            // LinkedIn job feed company selectors
+            // LinkedIn job search results company selectors (left side only)
             const selectors = [
                 '.job-search-card__subtitle-link', // Job search results
                 '.jobs-search-results-list__item-company', // Job listings
                 '.job-card-container__company-name', // Job cards
-                '.jobs-unified-top-card__company-name', // Job detail page
-                '.jobs-unified-top-card__subtitle-primary-grouping .app-aware-link', // Job detail company link
                 'a[data-control-name="job_search_company_name"]', // Company name links in job search
-                '.artdeco-entity-lockup__subtitle', // Company names in entity lockups
-                '.job-details-jobs-unified-top-card__company-name' // Job details company
+                '.artdeco-entity-lockup__subtitle' // Company names in entity lockups
             ];
             
             selectors.forEach(selector => {
@@ -76,6 +73,16 @@
                             
                             const companyName = cleanCompanyName(element.textContent);
                             if (!companyName || companyName.length < 2) return;
+                            
+                            // Additional check: ensure we're in a job listing context, not job detail context
+                            const isInJobListing = element.closest('.jobs-search-results-list') || 
+                                                  element.closest('.job-search-card') ||
+                                                  element.closest('.job-card-container') ||
+                                                  element.closest('.scaffold-layout__list') ||
+                                                  element.closest('[data-job-id]');
+                            
+                            // Skip if we're not in a job listing context (avoid right-side job details)
+                            if (!isInJobListing) return;
                             
                             // Mark as processed
                             element.classList.add(PROCESSED_CLASS);
@@ -138,10 +145,20 @@
                                 node.querySelector('.job-search-card__subtitle-link') ||
                                 node.querySelector('.jobs-search-results-list__item-company') ||
                                 node.querySelector('.job-card-container__company-name') ||
-                                node.matches && node.matches('.job-search-card__subtitle-link, .jobs-search-results-list__item-company')
+                                node.querySelector('a[data-control-name="job_search_company_name"]') ||
+                                node.querySelector('.artdeco-entity-lockup__subtitle') ||
+                                node.matches && node.matches('.job-search-card__subtitle-link, .jobs-search-results-list__item-company, .job-card-container__company-name, a[data-control-name="job_search_company_name"], .artdeco-entity-lockup__subtitle')
                             );
                             
-                            if (hasCompanyElements) {
+                            // Also check for job listing containers that might contain company elements
+                            const isJobContainer = node.matches && (
+                                node.matches('.jobs-search-results-list__list-item') ||
+                                node.matches('.job-search-card') ||
+                                node.matches('.job-card-container') ||
+                                node.matches('[data-job-id]')
+                            );
+                            
+                            if (hasCompanyElements || isJobContainer) {
                                 shouldProcess = true;
                                 break;
                             }
@@ -151,7 +168,7 @@
             });
             
             if (shouldProcess) {
-                // Debounce processing
+                // Debounce processing to handle rapid mutations during scrolling
                 setTimeout(processCompanyElements, 100);
             }
         });

@@ -57,12 +57,6 @@
     margin-left: 12px;
 }
 
-/* Job detail page */
-.jobs-unified-top-card__company-name + .glassdoor-btn-wrapper {
-    margin-left: 16px;
-    margin-top: 4px;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .glassdoor-btn {

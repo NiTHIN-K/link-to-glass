@@ -17,17 +17,27 @@
         button.title = `View ${companyName} on Glassdoor`;
         button.innerHTML = '🔍 Glassdoor';
         
+        // Store company name as data attribute to avoid closure issues
+        button.setAttribute('data-company-name', companyName);
+        
         // Add click tracking and prevent event propagation
         button.addEventListener('click', function(e) {
-            console.log('Glassdoor button clicked for:', companyName);
+            // Get company name from data attribute instead of closure variable
+            const currentCompanyName = e.target.getAttribute('data-company-name');
+            console.log('Glassdoor button clicked for:', currentCompanyName);
+            
             // Prevent default behavior and stop the event from bubbling up to parent elements 
             // (job cards, etc.) that might have their own click handlers
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             
+            // Construct URL using the company name from data attribute
+            const glassdoorUrl = GLASSDOOR_BASE_URL + encodeURIComponent(currentCompanyName);
+            console.log('Opening Glassdoor URL:', glassdoorUrl);
+            
             // Manually handle the navigation to ensure it works
-            window.open(button.href, '_blank', 'noopener,noreferrer');
+            window.open(glassdoorUrl, '_blank', 'noopener,noreferrer');
             return false;
         }, { capture: true });
         

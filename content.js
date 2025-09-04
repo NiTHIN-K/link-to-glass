@@ -20,10 +20,16 @@
         // Add click tracking and prevent event propagation
         button.addEventListener('click', function(e) {
             console.log('Glassdoor button clicked for:', companyName);
-            // Stop the event from bubbling up to parent elements (job cards, etc.)
-            // that might have their own click handlers
+            // Prevent default behavior and stop the event from bubbling up to parent elements 
+            // (job cards, etc.) that might have their own click handlers
+            e.preventDefault();
             e.stopPropagation();
-        });
+            e.stopImmediatePropagation();
+            
+            // Manually handle the navigation to ensure it works
+            window.open(button.href, '_blank', 'noopener,noreferrer');
+            return false;
+        }, { capture: true });
         
         return button;
     }

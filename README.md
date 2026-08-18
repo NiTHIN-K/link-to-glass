@@ -1,13 +1,12 @@
 # Link to Glass - LinkedIn to Glassdoor Extension
 
-A Chrome extension that automatically adds Glassdoor buttons next to company names on LinkedIn job feeds, making it easy to research companies while job hunting.
+A Chromium browser extension that adds Glassdoor search shortcuts next to company names in LinkedIn job results. It keeps company research one click away without leaving the current search.
 
 ## Features
 
 - 🔍 **Automatic Detection**: Finds company names on LinkedIn job search results and job detail pages
 - 🎯 **Smart Placement**: Adds Glassdoor buttons right next to company names
 - 🚀 **One-Click Access**: Opens company Glassdoor pages in new tabs
-- 📱 **Responsive Design**: Works on desktop and mobile LinkedIn
 - ⚡ **Dynamic Loading**: Works with LinkedIn's single-page application navigation
 
 ## Installation
@@ -41,8 +40,7 @@ A Chrome extension that automatically adds Glassdoor buttons next to company nam
    - Green "🔍 Glassdoor" buttons will automatically appear next to company names
    - Buttons appear on:
      - Job search results pages
-     - Individual job detail pages
-     - Company mentions in job listings
+    - Supported company rows in job-result lists
 
 3. **Click to Research**
    - Click any Glassdoor button to open that company's Glassdoor page
@@ -63,11 +61,12 @@ The extension uses content scripts to:
 - **Local Processing**: All company name detection happens locally in your browser
 - **External Links Only**: Only opens Glassdoor in new tabs when you click buttons
 
-## Compatibility
+## Compatibility and scope
 
-- **Chrome Browser**: Manifest V3 compatible
-- **LinkedIn**: Works with current LinkedIn interface
-- **Glassdoor**: Links to Glassdoor company search results
+- **Chromium browsers**: Manifest V3 compatible.
+- **LinkedIn job results**: The extension targets company elements in job-result lists, not every page element.
+- **Glassdoor**: Opens a company search in a new tab only after a click.
+- **Selector maintenance**: LinkedIn can change its page structure; update the selectors in `content.js` if buttons stop appearing.
 
 ## File Structure
 

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Link to Glass - LinkedIn to Glassdoor",
   "version": "1.0.0",
-  "description": "Adds Glassdoor buttons next to company names on LinkedIn job feed",
+  "description": "Adds Glassdoor search shortcuts to company names in LinkedIn job results.",
   
   "permissions": [
     "activeTab"

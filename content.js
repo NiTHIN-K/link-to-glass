@@ -6,6 +6,13 @@
     const GLASSDOOR_BASE_URL = 'https://www.glassdoor.com/Search/results.htm?keyword=';
     const BUTTON_CLASS = 'glassdoor-btn';
     const PROCESSED_CLASS = 'glassdoor-processed';
+    const SELECTORS = [
+        '.job-search-card__subtitle-link',
+        '.jobs-search-results-list__item-company',
+        '.job-card-container__company-name',
+        'a[data-control-name="job_search_company_name"]',
+        '.artdeco-entity-lockup__subtitle'
+    ];
     
     // Function to create Glassdoor button
     function createGlassdoorButton(companyName) {
@@ -15,18 +22,12 @@
         button.target = '_blank';
         button.rel = 'noopener noreferrer';
         button.title = `View ${companyName} on Glassdoor`;
-        button.innerHTML = '🔍 Glassdoor';
+        button.textContent = '🔍 Glassdoor';
         
-        // Add click tracking and prevent event propagation
         button.addEventListener('click', function(e) {
-            console.log('Glassdoor button clicked for:', companyName);
-            // Prevent default behavior and stop the event from bubbling up to parent elements 
-            // (job cards, etc.) that might have their own click handlers
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
-            
-            // Manually handle the navigation to ensure it works
             window.open(button.href, '_blank', 'noopener,noreferrer');
             return false;
         }, { capture: true });
@@ -54,16 +55,7 @@
     // Function to find and process company elements
     function processCompanyElements() {
         try {
-            // LinkedIn job search results company selectors (left side only)
-            const selectors = [
-                '.job-search-card__subtitle-link', // Job search results
-                '.jobs-search-results-list__item-company', // Job listings
-                '.job-card-container__company-name', // Job cards
-                'a[data-control-name="job_search_company_name"]', // Company name links in job search
-                '.artdeco-entity-lockup__subtitle' // Company names in entity lockups
-            ];
-            
-            selectors.forEach(selector => {
+            SELECTORS.forEach(selector => {
                 try {
                     const elements = document.querySelectorAll(selector + ':not(.' + PROCESSED_CLASS + ')');
                     
@@ -74,37 +66,24 @@
                             const companyName = cleanCompanyName(element.textContent);
                             if (!companyName || companyName.length < 2) return;
                             
-                            // Additional check: ensure we're in a job listing context, not job detail context
                             const isInJobListing = element.closest('.jobs-search-results-list') || 
                                                   element.closest('.job-search-card') ||
                                                   element.closest('.job-card-container') ||
                                                   element.closest('.scaffold-layout__list') ||
                                                   element.closest('[data-job-id]');
                             
-                            // Skip if we're not in a job listing context (avoid right-side job details)
                             if (!isInJobListing) return;
-                            
-                            // Mark as processed
                             element.classList.add(PROCESSED_CLASS);
-                            
-                            // Create and insert Glassdoor button
                             const glassdoorBtn = createGlassdoorButton(companyName);
-                            
-                            // Find the best place to insert the button
                             let insertTarget = element.parentElement;
-                            
-                            // If the element is a link, insert after it
                             if (element.tagName === 'A') {
                                 insertTarget = element;
                             }
-                            
-                            // Create wrapper if needed
                             if (insertTarget && !insertTarget.querySelector('.' + BUTTON_CLASS)) {
                                 const wrapper = document.createElement('span');
                                 wrapper.className = 'glassdoor-btn-wrapper';
                                 wrapper.appendChild(glassdoorBtn);
                                 
-                                // Insert after the company element
                                 if (insertTarget.nextSibling) {
                                     insertTarget.parentNode.insertBefore(wrapper, insertTarget.nextSibling);
                                 } else {
@@ -124,33 +103,20 @@
         }
     }
     
-    // Function to initialize the extension
     function init() {
-        console.log('Link to Glass extension loaded on LinkedIn');
-        
-        // Process existing elements
         processCompanyElements();
-        
-        // Set up observer for dynamic content
+        let processingTimer;
         const observer = new MutationObserver(function(mutations) {
             let shouldProcess = false;
             
             mutations.forEach(function(mutation) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                    // Check if any added nodes contain company elements
                     for (let node of mutation.addedNodes) {
                         if (node.nodeType === Node.ELEMENT_NODE) {
-                            // Check if the node itself or its children contain company elements
                             const hasCompanyElements = node.querySelector && (
-                                node.querySelector('.job-search-card__subtitle-link') ||
-                                node.querySelector('.jobs-search-results-list__item-company') ||
-                                node.querySelector('.job-card-container__company-name') ||
-                                node.querySelector('a[data-control-name="job_search_company_name"]') ||
-                                node.querySelector('.artdeco-entity-lockup__subtitle') ||
-                                node.matches && node.matches('.job-search-card__subtitle-link, .jobs-search-results-list__item-company, .job-card-container__company-name, a[data-control-name="job_search_company_name"], .artdeco-entity-lockup__subtitle')
+                                node.querySelector(SELECTORS.join(',')) ||
+                                node.matches && node.matches(SELECTORS.join(','))
                             );
-                            
-                            // Also check for job listing containers that might contain company elements
                             const isJobContainer = node.matches && (
                                 node.matches('.jobs-search-results-list__list-item') ||
                                 node.matches('.job-search-card') ||
@@ -168,23 +134,20 @@
             });
             
             if (shouldProcess) {
-                // Debounce processing to handle rapid mutations during scrolling
-                setTimeout(processCompanyElements, 100);
+                window.clearTimeout(processingTimer);
+                processingTimer = window.setTimeout(processCompanyElements, 120);
             }
         });
-        
-        // Start observing
         observer.observe(document.body, {
             childList: true,
             subtree: true
         });
         
-        // Also process when page navigation occurs (LinkedIn is SPA)
         let currentUrl = location.href;
         setInterval(function() {
             if (location.href !== currentUrl) {
                 currentUrl = location.href;
-                setTimeout(processCompanyElements, 500); // Delay for content to load
+                window.setTimeout(processCompanyElements, 500);
             }
         }, 1000);
     }
